@@ -35,8 +35,19 @@ function GreatVaultListMixin:OnLoad()
         GreatVaultListFrame:StopMovingOrSizing()
     end)
 
-	tinsert(UISpecialFrames, self:GetName())
+        
+    self:EnableKeyboard(true)
+    self:SetPropagateKeyboardInput(true)
 
+end
+
+function GreatVaultListMixin:OnKeyUp(key)
+    if not self:IsShown() then return end
+    if key == "ESCAPE" then
+        if WeeklyRewardsFrame and WeeklyRewardsFrame:IsShown() then return end
+        if WeeklyRewardsRemoteFrame and  WeeklyRewardsRemoteFrame:IsShown() then return end
+        self:Hide()
+    end
 end
 
 function GreatVaultListMixin:OnShow()

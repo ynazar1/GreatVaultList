@@ -32,6 +32,19 @@
 
 	<Frame name="GreatVaultListTableCellVaultStatusTemplate" mixin="GreatVaultListTableCellVaultStatusMixin" virtual="true">
 		<Size x="20" y="20"/>
+		<Frames>
+			<Button parentkey="button">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent" x="0" y="0" />
+					<Anchor point="BOTTOMRIGHT" relativeKey="$parent" x="0" y="0" />
+				</Anchors>
+					<Scripts>
+						<OnClick>
+							self:GetParent():OnClick()
+						</OnClick>
+					</Scripts>
+				</Button>
+		</Frames>
 		<Layers>
 			<Layer level="OVERLAY">
 				<Texture parentKey="NormalTexture" atlas="greatVault-whole-normal" setAllPoints="true" useAtlasSize="true" scale="0.1851852">

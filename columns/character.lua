@@ -10,7 +10,7 @@ function Column:AddOptions(category, optionTable)
     Column.Option = optionTable
 
     local function SetValueChangedCallback(setting, cb)
-        setting:SetValueChangedCallback(function(self)
+        GreatVaultList.Util:OnSettingChanged(setting, function(self)
             if cb and type(cb) == "function" then cb(self) end
 
             if GreatVaultListFrame:IsShown() then  -- refresh view if window is open
@@ -20,13 +20,13 @@ function Column:AddOptions(category, optionTable)
     end
     
     -- showRealmName
-	local setting = Settings.RegisterAddOnSetting(category, "useClassColors", "useClassColors", optionTable, "boolean", L["opt_columns_character_useClassColors_name"], false)
+	local setting = GreatVaultList.Util:RegisterSetting(category, "useClassColors", "useClassColors", optionTable, "boolean", L["opt_columns_character_useClassColors_name"], false)
     SetValueChangedCallback(setting)
 	Settings.CreateCheckbox(category, setting, L["opt_columns_character_useClassColors_desc"])
 
 
     -- showRealmName
-    local setting = Settings.RegisterAddOnSetting(category, "showRealmName", "showRealmName", optionTable, "boolean", L["opt_columns_character_showRealmName_name"], false)
+    local setting = GreatVaultList.Util:RegisterSetting(category, "showRealmName", "showRealmName", optionTable, "boolean", L["opt_columns_character_showRealmName_name"], false)
     SetValueChangedCallback(setting)
 	Settings.CreateCheckbox(category, setting, L["opt_columns_character_showRealmName_desc"])
 end

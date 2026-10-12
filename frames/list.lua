@@ -247,7 +247,7 @@ function GreatVaultListListOpenVaultMixin:OnShow()
 end
 
 function GreatVaultListListOpenVaultMixin:OnClick()
-	WeeklyRewardsFrame:SetShown(not WeeklyRewardsFrame:IsShown());
+	SetUIPanelShown(WeeklyRewardsFrame, not WeeklyRewardsFrame:IsShown());
 end
 
 

@@ -26,7 +26,7 @@ Column.config = {
         return ary[math.random(#ary)]
     end,
     event = {
-        {"WEEKLY_REWARDS_UPDATE", "WEEKLY_REWARDS_ITEM_CHANGED"},
+        {"WEEKLY_REWARDS_UPDATE"},
         function(self)
             GreatVaultList.Data:store(self.config, true)
             if GreatVaultListFrame:IsShown() then  -- refresh view if window is open

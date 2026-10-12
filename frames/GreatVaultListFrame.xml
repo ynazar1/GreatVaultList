@@ -3,7 +3,7 @@
 
 	<Script file="GreatVaultListFMixin.lua"/>
 
-
+	<Include file="frames/WeeklyRewardsRemoteFrame.xml"/>
 
 	<Include file="frames/TableCell.xml"/>
 	<Include file="frames/TableHeaderString.xml"/>
@@ -12,6 +12,8 @@
 	<Include file="frames/Content.xml"/>
 	<Include file="frames/HelpButton.xml"/>
 	<Include file="frames/list.xml"/>
+	
+
 
 
 	<Include file="tabs/mixin.lua"/>
@@ -51,6 +53,7 @@
 			<OnLoad method="OnLoad"/>
 			<OnShow method="OnShow"/>
 			<OnHide method="OnHide"/>
+			<OnKeyDown method="OnKeyUp"/>
 		</Scripts>
 	</Frame>
 

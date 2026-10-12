@@ -2,12 +2,32 @@ local ColumKey = "highestReward"
 local Column = GreatVaultList:NewModule(ColumKey, GREATVAULTLIST_COLUMNS)
 local L, _ = GreatVaultList:GetLibs()
 
-local WeeklyRewardChestThresholdType = {
-    Enum.WeeklyRewardChestThresholdType.Raid, 
-    Enum.WeeklyRewardChestThresholdType.Activities,
-    Enum.WeeklyRewardChestThresholdType.World,
-}
+ local typeToDataSource = {
+        [Enum.WeeklyRewardChestThresholdType.Raid] = "raid",
+        [Enum.WeeklyRewardChestThresholdType.Activities] = "dungeons",
+        [Enum.WeeklyRewardChestThresholdType.World] = "delves"
+    }
 
+
+local function highestRewardFN(Adata)
+    if not _.isTable(Adata) then return nil end
+    local ilvlTable = {0}
+    
+    _.forEach(Adata, function(entry)
+        local itemLevel = entry.itemLevel or 0
+        table.insert(ilvlTable, itemLevel)
+    end)
+
+    return math.max(unpack(ilvlTable))
+end
+
+local function formatNumber(rowData, rawNumber)
+    if not rawNumber then  return nil end
+    if not _.isNumber(rawNumber) then  return nil end
+    if rawNumber == 0 then return nil end
+
+    return GreatVaultList.Util:colorItemLvl(rowData.data.averageItemLevel, rawNumber, 3, 6)
+end
 
 
 Column.key = ColumKey
@@ -23,57 +43,16 @@ Column.config = {
     ["demo"] = function(idx)
         return math.random(500, 600)
     end,
-    event = {
-        {"WEEKLY_REWARDS_UPDATE", "WEEKLY_REWARDS_ITEM_CHANGED"},
-        function(self)
-            GreatVaultList.Data:store(self.config, true)
-            if GreatVaultListFrame:IsShown() then  -- refresh view if window is open
-                GreatVaultListFrame:RefreshScrollFrame()
-            end
-        end
-    },
-    ["store"] = function(characterInfo)
-        local highestReward = 0
-        local hasValidData = false
-        local apiCallsMade = 0
-        local totalApiCalls = #WeeklyRewardChestThresholdType
-
-        _.forEach(WeeklyRewardChestThresholdType, function(id)
-            local info = C_WeeklyRewards.GetActivities(id)
-            apiCallsMade = apiCallsMade + 1
-            
-            if not info or not info[1] or not info[1].id then return end
-            
-            local itemLink = C_WeeklyRewards.GetExampleRewardItemHyperlinks(info[1].id)
-            if itemLink then
-                local itemLevel = C_Item.GetDetailedItemLevelInfo(itemLink)
-                if itemLevel and itemLevel > 0 then
-                    highestReward = math.max(highestReward, itemLevel)
-                    hasValidData = true
-                end
-            end
-        end)
-
-        -- If we made all API calls but found no valid rewards, it's legitimate to set to nil
-        -- If we couldn't make all API calls, preserve existing value to avoid data loss
-        if apiCallsMade == totalApiCalls then
-            if hasValidData and highestReward > 0 then
-                characterInfo[ColumKey] = highestReward
-            else
-                -- All APIs were called but no rewards found - legitimate nil case
-                characterInfo[ColumKey] = nil
-            end
-        elseif characterInfo[ColumKey] then
-            -- Not all APIs were called - preserve existing value to avoid data loss
-            -- This handles cases where APIs aren't fully loaded yet
-        end
-        
-        return characterInfo
-    end,
     ["populate"] = function(self, number)
         if not self.rowData then return number end
-        if type(number) ~= "number" then return number end
-        
-        return GreatVaultList.Util:colorItemLvl(self.rowData.data.averageItemLevel, number, 3, 6)
+        local computed = GreatVaultList.Data:ComputeHighestReward(self.rowData.data)
+        if computed and computed > 0 then
+            return formatNumber(self.rowData, computed)
+        end
+        -- No unlocked vault slots this week: leave the column empty.
+        if GreatVaultList.Data:HasUnlockedVaultSlot(self.rowData.data) then
+            return formatNumber(self.rowData, self.rowData.data.highestReward or number)
+        end
+        return nil
     end
 }

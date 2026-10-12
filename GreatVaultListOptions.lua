@@ -10,6 +10,9 @@ GreatVaultListOptions = {}
 
 
 function GreatVaultListOptions:init()
+    if self.initialized then return end
+    self.initialized = true
+
     local AddOnInfo = { C_AddOns.GetAddOnInfo(addonName) }
     local category, layout = Settings.RegisterVerticalLayoutCategory(AddOnInfo[2])
     self.category = category
@@ -24,10 +27,10 @@ function GreatVaultListOptions:init()
     self:InitTabsCategory()
 
 
-    local setting = Settings.RegisterAddOnSetting(self.category, "mninimaphide", "hide",
+    local setting = GreatVaultList.Util:RegisterSetting(self.category, "mninimaphide", "hide",
         GreatVaultList.db.global.Options.minimap, "boolean", L["opt_minimap_name"],
         GreatVaultList.db.global.Options.minimap.hide)
-    setting:SetValueChangedCallback(function(self)
+    GreatVaultList.Util:OnSettingChanged(setting, function(self)
         if self:GetValue() then
             GreatVaultList.minimapIcon:Hide(addonName)
         else
@@ -39,9 +42,9 @@ function GreatVaultListOptions:init()
 
     -- scale
     if not BlizzMoveAPI then
-        local setting = Settings.RegisterAddOnSetting(self.category, "scale", "scale", GreatVaultList.db.global.Options,
+        local setting = GreatVaultList.Util:RegisterSetting(self.category, "scale", "scale", GreatVaultList.db.global.Options,
             "number", L["opt_scale_name"], 1)
-        setting:SetValueChangedCallback(function(self) GreatVaultListFrame:SetScale(self:GetValue()) end)
+        GreatVaultList.Util:OnSettingChanged(setting, function(self) GreatVaultListFrame:SetScale(self:GetValue()) end)
 
         local function FormatScaledPercentage(value)
             return FormatPercentage(value);
@@ -53,9 +56,9 @@ function GreatVaultListOptions:init()
     end
 
     -- lines
-    local setting = Settings.RegisterAddOnSetting(category, "lines", "lines", GreatVaultList.db.global.Options, "number",
+    local setting = GreatVaultList.Util:RegisterSetting(category, "lines", "lines", GreatVaultList.db.global.Options, "number",
         L["opt_lines_name"], 12)
-    setting:SetValueChangedCallback(function(self)
+    GreatVaultList.Util:OnSettingChanged(setting, function(self)
         GreatVaultListFrame:UpdateSize()
     end)
 
@@ -97,16 +100,18 @@ function GreatVaultListOptions:init()
 
     local deleteOptionsKeys = {};
     local function GetOptions()
+        wipe(deleteOptionsKeys)
         local deleteOptions = Settings.CreateControlTextContainer();
         local i = 0
         deleteOptions:Add(0, "");
 
         _.forEach(GreatVaultList.db.global.characters, function(entry, key)
+            if type(entry) ~= "table" or not entry.name then return end
             i = i + 1;
 
             local name = entry.normalizedRealm and string.format("%s-%s", entry.name, entry.normalizedRealm) or entry.name
             deleteOptions:Add(i, name);
-            table.insert(deleteOptionsKeys, key)
+            deleteOptionsKeys[i] = key
         end)
 
         return deleteOptions:GetData();
@@ -114,7 +119,7 @@ function GreatVaultListOptions:init()
 
 
     local selectedOption = {}
-    local characterDeleteSetting = Settings.RegisterAddOnSetting(self.category, "dummyVar", "dummyVar", selectedOption, "number",  L["opt_CharacterDelete_slider_name"], 0)
+    local characterDeleteSetting = GreatVaultList.Util:RegisterSetting(self.category, "dummyVar", "dummyVar", selectedOption, "number",  L["opt_CharacterDelete_slider_name"], 0)
     Settings.CreateDropdown(self.category, characterDeleteSetting, GetOptions, L["opt_CharacterDelete_slider_desc"]);
 
 
@@ -122,14 +127,16 @@ function GreatVaultListOptions:init()
         "", 
         L["opt_CharacterDelete_btn_name"],
         function() 
-            if not selectedOption.dummyVar or selectedOption.dummyVar == 0 then return end
+            local selectedIndex = characterDeleteSetting:GetValue()
+            if not selectedIndex or selectedIndex == 0 then return end
 
             StaticPopupDialogs["GreatVaultListOptions_COMFIRM_DELETE_CHARATER"] = {
                 text =  L["opt_CharacterDelete_confirm_text"],
                 button1 = YES,
                 button2 = NO,
                 OnAccept = function()
-                    local keyToDelete = deleteOptionsKeys[selectedOption.dummyVar]
+                    local keyToDelete = deleteOptionsKeys[selectedIndex]
+                    if not keyToDelete then return end
                     GreatVaultList.db.global.characters[keyToDelete] = nil
                     characterDeleteSetting:SetValue(0)
                 end,
@@ -161,9 +168,9 @@ function GreatVaultListOptions:InitTabsCategory()
         local checkboxName = string.format(L["opt_tab_actve_name"], name, id)
         local checkboxTooltip = string.format(L["opt_tab_actve_desc"], name, id)
 
-        local setting = Settings.RegisterAddOnSetting(self.TabsSubcategory, id .. "active", "active",
+        local setting = GreatVaultList.Util:RegisterSetting(self.TabsSubcategory, id .. "active", "active",
             GreatVaultList.db.global.Options.tabs[id], "boolean", checkboxName, true)
-        setting:SetValueChangedCallback(function(self)
+        GreatVaultList.Util:OnSettingChanged(setting, function(self)
             local value = self:GetValue()
             if value then
                 entry:Enable()
@@ -212,11 +219,11 @@ function GreatVaultListOptions:InitColumnCategory()
     local changesModules = CopyTable(GreatVaultList.db.global.Options.modules)
 
 
-    local setting = Settings.RegisterAddOnSetting(self.ColumnsSubcategory, "modules", "modules",
+    local setting = GreatVaultList.Util:RegisterSetting(self.ColumnsSubcategory, "modules", "modules",
         GreatVaultList.db.global.Options, "table", L["opt_column_order_name"], default)
 
 
-    setting:SetValueChangedCallback(function(self)
+    GreatVaultList.Util:OnSettingChanged(setting, function(self)
         local value = self:GetValue()
         if not value then return end
 

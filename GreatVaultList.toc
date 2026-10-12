@@ -1,8 +1,8 @@
-﻿## Interface: 110200
+## Interface: 120100
 ## Title: Great Vault List
 ## Notes: Lists the great vault options for all your alt characters
 ## Notes-ruRU: Аддон, который отслеживает прогресс Великого Хранилища для всех Ваших персонажей
-## Version: @project-version@
+## Version: 2.9.14
 ## Author: Muhmiauwau
 ## AddonCompartmentFunc: GreatVaultList_OnAddonCompartmentClick
 ## SavedVariables: GreatVaultList2DB

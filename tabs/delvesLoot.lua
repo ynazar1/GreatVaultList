@@ -80,14 +80,14 @@ function GreatVaultListDelvesLootListMixin:GetHelpConfig()
 end
 
 function GreatVaultListDelvesLootListMixin:AddOptions(category)
-    local setting = Settings.RegisterAddOnSetting(category, "showKeys",
+    local setting = GreatVaultList.Util:RegisterSetting(category, "showKeys",
                                                   "showKeys", GreatVaultList.db
                                                       .global.Options.tabs[self.id],
                                                   "boolean",
                                                   L["opt_tab_delvesLoot_showKeys_name"],
                                                   true)
     local s = self
-    setting:SetValueChangedCallback(function(self)
+    GreatVaultList.Util:OnSettingChanged(setting, function(self)
         local value = self:GetValue()
         s:SetKeysState(value)
     end)

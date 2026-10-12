@@ -91,6 +91,6 @@ end
 function GreatVaultList.ElvUi:AddOption(category)
 	if not C_AddOns.IsAddOnLoaded("ElvUI") then return false end
 	
-	local setting = Settings.RegisterAddOnSetting(category, "ElvUiSkin", "ElvUiSkin", GreatVaultList.db.global.Options, "boolean", L["opt_ElvUiSkin_name"], GreatVaultList.db.global.Options.ElvUiSkin)
+	local setting = GreatVaultList.Util:RegisterSetting(category, "ElvUiSkin", "ElvUiSkin", GreatVaultList.db.global.Options, "boolean", L["opt_ElvUiSkin_name"], GreatVaultList.db.global.Options.ElvUiSkin)
     Settings.CreateCheckbox(category, setting, L["opt_ElvUiSkin_desc"])
 end

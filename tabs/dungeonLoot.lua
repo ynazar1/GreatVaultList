@@ -64,7 +64,11 @@ function GreatVaultListDungeonLootListMixin:BuildData()
             local crestIcon = entry.crest.icon or ""
             local crestString = crestIcon
             if crestAmount then
-                crestString = string.format("%s x %d", crestIcon, crestAmount)
+                if crestAmount == 0 then 
+                    crestString = crestIcon
+                else
+                    crestString = string.format("%s x %d", crestIcon, crestAmount)
+                end
             end
 
             table.insert(result, {

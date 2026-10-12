@@ -16,7 +16,7 @@ Column.config = {
     ['emptyStr'] = "-",
     ["demo"] = function(idx)
         local mapChallengeModeIDs = {}
-        table.foreach(C_ChallengeMode.GetMapTable(), function(k, id)
+        _.foreach(C_ChallengeMode.GetMapTable(), function(k, id)
             tinsert(mapChallengeModeIDs, id)
         end)
         

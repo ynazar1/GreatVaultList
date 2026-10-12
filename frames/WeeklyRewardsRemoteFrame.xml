@@ -1,0 +1,126 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\..\FrameXML\UI.xsd">
+
+   	<Include file="WeeklyRewardsRemoteFrame.lua"/>
+
+    <Frame name="WeeklyRewardsRemoteFrameTemplate" mixin="GreatVaultListWeeklyRewardsRemoteMixin" parent="UIParent" hidden="true" enableMouse="true" toplevel="true" frameLevel="100" virtual="true">
+		<Size x="1165" y="657"/>
+		<Anchors>
+			<Anchor point="CENTER"/>
+		</Anchors>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture parentKey="Background" atlas="evergreen-weeklyrewards-frame-back">
+					<Anchors>
+						<Anchor point="TOPLEFT" x="10" y="-8"/>
+						<Anchor point="BOTTOMRIGHT" x="-10" y="8"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="BORDER">
+				<Texture parentKey="BorderShadow" atlas="evergreen-weeklyrewards-frame-back-shadow">
+					<Anchors>
+						<Anchor point="TOPLEFT" x="10" y="-8"/>
+						<Anchor point="BOTTOMRIGHT" x="-10" y="8"/>
+					</Anchors>
+				</Texture>
+				<Texture parentKey="Divider1" atlas="evergreen-weeklyrewards-divider" useAtlasSize="true">
+					<Anchors>
+						<Anchor point="TOP" y="-291"/>
+					</Anchors>
+				</Texture>
+				<Texture parentKey="Divider2" atlas="evergreen-weeklyrewards-divider" useAtlasSize="true">
+					<Anchors>
+						<Anchor point="TOP" y="-446"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<FontString parentKey="PreviousRewardNotification" inherits="SystemFont_Med3" justifyH="CENTER" hidden="true" text="WEEKLY_REWARDS_UNCLAIMED_REWARDS_FROM_PREVIOUS_TIME">
+					<Anchors>
+						<Anchor point="BOTTOM" x="0" y="41"/>
+					</Anchors>
+					<Color color="HIGHLIGHT_FONT_COLOR"/>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Frame parentKey="BorderContainer" frameLevel="1500" setAllPoints="true">
+				<Layers>
+					<Layer level="OVERLAY" textureSubLevel="4">
+						<Texture parentKey="Border" atlas="evergreen-weeklyrewards-frame">
+							<Anchors>
+								<Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="-2" y="4"/>
+								<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="2" y="-4"/>
+							</Anchors>
+						</Texture>
+					</Layer>
+					<Layer level="OVERLAY" textureSubLevel="5">
+						<Texture parentKey="TopDecor" atlas="evergreen-weeklyrewards-frame-topdecor" useAtlasSize="true">
+							<Anchors>
+								<Anchor point="CENTER" relativePoint="TOP" y="-16"/>
+							</Anchors>
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+		
+
+			<Frame parentKey="HeaderFrame">
+				<Size x="1056" y="85"/>
+				<Anchors>
+					<Anchor point="TOP" y="-34"/>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString parentKey="Text" inherits="SystemFont_Large" justifyH="CENTER" spacing="2">
+							<Anchors>
+								<Anchor point="CENTER" relativePoint="CENTER" y="-16"/>
+							</Anchors>
+							<Color color="HIGHLIGHT_FONT_COLOR"/>
+						</FontString>
+						<Texture parentKey="HeaderDivider" atlas="evergreen-weeklyrewards-header" useAtlasSize="true">
+							<Anchors>
+								<Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.Text" y="-8"/>
+							</Anchors>
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame parentKey="RaidFrame" inherits="WeeklyRewardActivityTypeTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="68" y="-149"/>
+				</Anchors>
+			</Frame>
+			<Frame parentKey="MythicFrame" inherits="WeeklyRewardActivityTypeTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="68" y="-307"/>
+				</Anchors>
+			</Frame>
+			<Frame parentKey="PVPFrame" inherits="WeeklyRewardActivityTypeTemplate" hidden="true">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="68" y="-470"/>
+				</Anchors>
+			</Frame>
+			<Frame parentKey="WorldFrame" inherits="WeeklyRewardActivityTypeTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="68" y="-470"/>
+				</Anchors>
+			</Frame>
+			<ModelScene parentKey="ModelScene" inherits="ScriptAnimatedModelSceneTemplate" setAllPoints="true" drawLayer="BACKGROUND" frameLevel="300"/>
+
+			<Button parentKey="CloseButton" inherits="UIPanelCloseButton" frameLevel="6000">
+				<Anchors>
+					<Anchor point="TOPRIGHT" x="-10" y="-8"/>
+				</Anchors>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad method="OnLoad"/>
+			<OnShow method="OnShow"/>
+			<OnHide method="OnHide"/>
+			<OnEvent method="OnEvent"/>
+		</Scripts>
+	</Frame>
+	
+</Ui>

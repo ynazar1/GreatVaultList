@@ -84,3 +84,33 @@ function TableCellVaultStatusMixin:Populate(rowData, dataIndex)
 	self.centerPlateTexture:SetShown(state == "incomplete");
 	self.NormalTexture:SetDesaturated(state ~= "collect");
 end
+
+
+function TableCellVaultStatusMixin:OnClick() 
+    self:ShowGreatVault(self.rowData.data)
+end
+
+function TableCellVaultStatusMixin:ShowGreatVault(data)
+    if not data then return end
+
+    if not WeeklyRewardsFrame and WeeklyRewards_LoadUI then
+        WeeklyRewards_LoadUI()
+    end
+    if not WeeklyRewardsRemoteFrame then
+        WeeklyRewardsRemoteFrame  = CreateFrame("Frame","WeeklyRewardsRemoteFrame", UIParent, "WeeklyRewardsRemoteFrameTemplate")
+        WeeklyRewardsRemoteFrame:EnableMouse(true)
+        GreatVaultList:addWeeklyRewardFrame()
+    end
+
+    local sameName = (data.name == WeeklyRewardsRemoteFrame.charName)
+    if WeeklyRewardsRemoteFrame:IsVisible() then
+        HideUIPanel(WeeklyRewardsRemoteFrame)
+        if not sameName then 
+            WeeklyRewardsRemoteFrame:show(data)
+        end
+    else
+        WeeklyRewardsRemoteFrame:show(data)
+    end
+
+
+end

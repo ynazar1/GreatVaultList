@@ -39,3 +39,25 @@ function GreatVaultList.Util:colorItemLvl(baseilvl, ilvl, addMod, diffMod)
 
     return CreateColor(r1, g1, b1):WrapTextInColorCode(ilvl)
 end
+
+-- 12.0+ settings variables are global. Prefix them so we don't collide with other addons
+-- (e.g. ColorTools already registers "useClassColors").
+function GreatVaultList.Util:RegisterSetting(category, variable, key, tbl, varType, name, default)
+    local unique = "GreatVaultList_" .. tostring(variable)
+    return Settings.RegisterAddOnSetting(category, unique, key, tbl, varType, name, default)
+end
+
+-- 12.0 renamed SettingMixin:SetValueChangedCallback -> SetOnValueChangedCallback
+function GreatVaultList.Util:OnSettingChanged(setting, callback)
+    if type(setting) ~= "table" then return end
+    local wrapped = function(self, value)
+        if callback then callback(self, value) end
+    end
+    if setting.SetOnValueChangedCallback then
+        setting:SetOnValueChangedCallback(wrapped)
+    elseif setting.SetValueChangedCallback then
+        setting:SetValueChangedCallback(wrapped)
+    elseif Settings.SetOnValueChangedCallback and setting.GetVariable then
+        Settings.SetOnValueChangedCallback(setting:GetVariable(), function(_, s, v) wrapped(s, v) end)
+    end
+end

@@ -12,7 +12,7 @@ function Column:AddOptions(category, optionTable)
     if type(optionTable["floatNumber"]) ~= "number" then optionTable["floatNumber"] = 2 end
 
 
-	local setting = Settings.RegisterAddOnSetting(category, "floatNumber", "floatNumber", optionTable, "number", L["opt_columns_ilevel_floatNumber_name"], 2)
+	local setting = GreatVaultList.Util:RegisterSetting(category, "floatNumber", "floatNumber", optionTable, "number", L["opt_columns_ilevel_floatNumber_name"], 2)
 
     local options = Settings.CreateSliderOptions(0, 5, 1)
     options:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right, function(num) return num end);
