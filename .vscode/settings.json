@@ -344,7 +344,12 @@
         "UIMenus",
         "MicroButtonAndBagsBar",
         "MinimapCluster",
-        "GameMenuFrame"
+        "GameMenuFrame",
+        "DISABLED_FONT_COLOR",
+        "HideUIPanel",
+        "ShowUIPanel",
+        "CreateColorFromHexString",
+        "FILTER"
     ],
     "Lua.diagnostics.disable": [
         "undefined-field",
