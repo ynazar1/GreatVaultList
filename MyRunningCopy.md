@@ -1,6 +1,8 @@
-# my-upstream-merge
+# running
 
-This branch is the copy to try in game. It is current upstream (2.10.2) plus the local fixes that were already working on the 2.9.14 running copy.
+This branch is what you install in `_retail_/Interface/AddOns/GreatVaultList`. It matches **`my-upstream-merge`** (upstream PR #32) plus local-only files: this note and extra `.vscode` Lua globals for the editor.
+
+**`my-upstream-merge`** is only for the pull request to muhmiauwauWOW — no `MyRunningCopy.md` or editor-only commits there.
 
 `legacy-running-copy` is the untouched 2.9.14 snapshot (superseded by this branch). Kept only as a rollback reference.
 
