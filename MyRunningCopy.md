@@ -2,7 +2,7 @@
 
 This branch is the copy to try in game. It is current upstream (2.10.2) plus the local fixes that were already working on the 2.9.14 running copy.
 
-`my-running-copy` is the untouched snapshot of that 2.9.14 copy, kept so this merge can be dropped.
+`legacy-running-copy` is the untouched 2.9.14 snapshot (superseded by this branch). Kept only as a rollback reference.
 
 ## Kept from upstream
 
